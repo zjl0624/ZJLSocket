@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:ZJLSocket/ZJLSocket.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:ZJLClient_example/ZJLClient_example.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:ZJLServer_example/ZJLServer_example.xcodeproj">
+   </FileRef>
+</Workspace>
