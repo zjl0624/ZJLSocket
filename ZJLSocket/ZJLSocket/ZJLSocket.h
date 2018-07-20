@@ -14,7 +14,7 @@
 
 - (void)readDataFromClient:(id)content;
 @end
-@interface ZJLTCPSocket : NSObject
+@interface ZJLSocket : NSObject
 
 @property (nonatomic,weak) id<ReadDataDelegate> delegate;
 

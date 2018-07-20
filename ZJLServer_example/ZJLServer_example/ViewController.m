@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "ZJLTCPSocket.h"
+#import "ZJLSocket.h"
 @interface ViewController ()<ReadDataDelegate>
 - (IBAction)sendAction:(id)sender;
 
@@ -15,7 +15,7 @@
 @property (weak, nonatomic) IBOutlet UITextView *textView;
 @property (weak, nonatomic) IBOutlet UITextField *contentTextField;
 @property (weak, nonatomic) IBOutlet UITextField *portTextField;
-@property (strong,nonatomic) ZJLTCPSocket *serverSocket;
+@property (strong,nonatomic) ZJLSocket *serverSocket;
 
 @end
 
@@ -40,7 +40,7 @@
 }
 
 - (IBAction)startServerAction:(id)sender {
-	_serverSocket = [[ZJLTCPSocket alloc] initTCPServerSocketWithPort:[self.portTextField.text integerValue]];
+	_serverSocket = [[ZJLSocket alloc] initTCPServerSocketWithPort:[self.portTextField.text integerValue]];
 	_serverSocket.delegate = self;
 
 }

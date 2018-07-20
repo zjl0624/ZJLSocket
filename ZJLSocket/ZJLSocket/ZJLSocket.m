@@ -6,16 +6,16 @@
 //  Copyright © 2018年 zjl. All rights reserved.
 //
 
-#import "ZJLTCPSocket.h"
+#import "ZJLSocket.h"
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <arpa/inet.h>
-@interface ZJLTCPSocket()
+@interface ZJLSocket()
 @property (nonatomic,assign) CFSocketRef socketRef;
 @property (nonatomic,strong) NSMutableDictionary *writeStreamDic;
 @property (nonatomic,strong) NSString *currentAddress;
 @end
-@implementation ZJLTCPSocket
+@implementation ZJLSocket
 #pragma mark - Init Method
 - (instancetype)initTCPClientSocketWithIp:(NSString *)ipAddress port:(NSInteger)port{
 	self = [super init];
@@ -55,6 +55,7 @@
 	return self;
 
 }
+
 
 - (CFDataRef)createSocketWithip:(NSString *)ipAddress port:(NSInteger)port CFSocketCallBackType:(CFSocketCallBackType)type{
 	//创建socket上下文
@@ -127,7 +128,7 @@ void readStreamCallback(CFReadStreamRef readStream,CFStreamEventType evenType,vo
 	
 //	NSString *address = (__bridge NSString *)(clientCallBackInfo);
 //	NSDictionary *dic = (__bridge NSDictionary *)(clientCallBackInfo);
-	ZJLTCPSocket *selfClass = (__bridge ZJLTCPSocket *)(clientCallBackInfo);
+	ZJLSocket *selfClass = (__bridge ZJLSocket *)(clientCallBackInfo);
 //	NSLog(@"%@", aaa);
 	
 	// ----从可读的数据流中读取数据，返回值是多少字节读到的，如果为0就是已经全部结束完毕，如果是-1则是数据流没有打开或者其他错误发生
@@ -146,7 +147,7 @@ void readStreamCallback(CFReadStreamRef readStream,CFStreamEventType evenType,vo
 
 //连接服务器的回调
 void SocketCallBack( CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef address, const void *data, void *info ) {
-	ZJLTCPSocket *selfClass = (__bridge ZJLTCPSocket *)(info);
+	ZJLSocket *selfClass = (__bridge ZJLSocket *)(info);
 	if (callbackType == kCFSocketConnectCallBack) {
 		if (data != NULL) {
 			NSLog(@"连接失败");
