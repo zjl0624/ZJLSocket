@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F8BEEC521009328004FBA39 /* ZJLSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F8BEEC421009328004FBA39 /* ZJLSocket.m */; };
-		5F8BEEC621009328004FBA39 /* ZJLSocket.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5F8BEEC321009328004FBA39 /* ZJLSocket.h */; };
+		5FAE16DA210171B00062B0CA /* ZJLTCPSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FAE16D9210171B00062B0CA /* ZJLTCPSocket.m */; };
+		5FAE16DD210171C10062B0CA /* ZJLUDPSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5FAE16DC210171C10062B0CA /* ZJLUDPSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -18,7 +18,6 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
-				5F8BEEC621009328004FBA39 /* ZJLSocket.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -26,8 +25,10 @@
 
 /* Begin PBXFileReference section */
 		5F8BEEC021009328004FBA39 /* libZJLSocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libZJLSocket.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		5F8BEEC321009328004FBA39 /* ZJLSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJLSocket.h; sourceTree = "<group>"; };
-		5F8BEEC421009328004FBA39 /* ZJLSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJLSocket.m; sourceTree = "<group>"; };
+		5FAE16D8210171B00062B0CA /* ZJLTCPSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJLTCPSocket.h; sourceTree = "<group>"; };
+		5FAE16D9210171B00062B0CA /* ZJLTCPSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJLTCPSocket.m; sourceTree = "<group>"; };
+		5FAE16DB210171C10062B0CA /* ZJLUDPSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZJLUDPSocket.h; sourceTree = "<group>"; };
+		5FAE16DC210171C10062B0CA /* ZJLUDPSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZJLUDPSocket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,8 +61,10 @@
 		5F8BEEC221009328004FBA39 /* ZJLSocket */ = {
 			isa = PBXGroup;
 			children = (
-				5F8BEEC321009328004FBA39 /* ZJLSocket.h */,
-				5F8BEEC421009328004FBA39 /* ZJLSocket.m */,
+				5FAE16D8210171B00062B0CA /* ZJLTCPSocket.h */,
+				5FAE16D9210171B00062B0CA /* ZJLTCPSocket.m */,
+				5FAE16DB210171C10062B0CA /* ZJLUDPSocket.h */,
+				5FAE16DC210171C10062B0CA /* ZJLUDPSocket.m */,
 			);
 			path = ZJLSocket;
 			sourceTree = "<group>";
@@ -123,7 +126,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F8BEEC521009328004FBA39 /* ZJLSocket.m in Sources */,
+				5FAE16DA210171B00062B0CA /* ZJLTCPSocket.m in Sources */,
+				5FAE16DD210171C10062B0CA /* ZJLUDPSocket.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

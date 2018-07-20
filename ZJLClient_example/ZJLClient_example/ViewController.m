@@ -7,8 +7,16 @@
 //
 
 #import "ViewController.h"
-#import "ZJLSocket.h"
+#import "ZJLTCPSocket.h"
 @interface ViewController ()
+- (IBAction)receiveAction:(id)sender;
+- (IBAction)connectAction:(id)sender;
+- (IBAction)sendAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UITextField *IPAddressTextField;
+@property (weak, nonatomic) IBOutlet UITextField *portTextFiled;
+@property (weak, nonatomic) IBOutlet UITextField *contentTextFiled;
+@property (strong,nonatomic) ZJLTCPSocket *clientSocket;
+
 
 @end
 
@@ -16,7 +24,7 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	
 }
 
 
@@ -26,4 +34,15 @@
 }
 
 
+- (IBAction)receiveAction:(id)sender {
+	[_clientSocket readScreamData];
+}
+
+- (IBAction)connectAction:(id)sender {
+	_clientSocket = [[ZJLTCPSocket alloc] initTCPClientSocketWithIp:self.IPAddressTextField.text port:[self.portTextFiled.text integerValue]];
+}
+
+- (IBAction)sendAction:(id)sender {
+	[_clientSocket sendScreamData:self.contentTextFiled.text];
+}
 @end

@@ -296,6 +296,7 @@
 					"\"$(SRCROOT)/../ZJLSocket/ZJLSocket\"",
 				);
 				INFOPLIST_FILE = ZJLServer_example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zjl.ZJLServer-example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -313,6 +314,7 @@
 					"\"$(SRCROOT)/../ZJLSocket/ZJLSocket\"",
 				);
 				INFOPLIST_FILE = ZJLServer_example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zjl.ZJLServer-example";
 				PRODUCT_NAME = "$(TARGET_NAME)";

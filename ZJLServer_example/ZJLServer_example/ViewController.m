@@ -7,8 +7,15 @@
 //
 
 #import "ViewController.h"
-#import "ZJLSocket.h"
+#import "ZJLTCPSocket.h"
 @interface ViewController ()
+- (IBAction)sendAction:(id)sender;
+
+- (IBAction)startServerAction:(id)sender;
+@property (weak, nonatomic) IBOutlet UITextView *textView;
+@property (weak, nonatomic) IBOutlet UITextField *contentTextField;
+@property (weak, nonatomic) IBOutlet UITextField *portTextField;
+@property (strong,nonatomic) ZJLTCPSocket *serverSocket;
 
 @end
 
@@ -25,4 +32,12 @@
 }
 
 
+- (IBAction)sendAction:(id)sender {
+	[_serverSocket sendScreamDataByWriteScream:self.contentTextField.text];
+}
+
+- (IBAction)startServerAction:(id)sender {
+	_serverSocket = [[ZJLTCPSocket alloc] initTCPServerSocketWithPort:[self.portTextField.text integerValue]];
+
+}
 @end
