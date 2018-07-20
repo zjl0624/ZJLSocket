@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "ZJLTCPSocket.h"
-@interface ViewController ()
+@interface ViewController ()<ReadDataDelegate>
 - (IBAction)sendAction:(id)sender;
 
 - (IBAction)startServerAction:(id)sender;
@@ -30,7 +30,10 @@
 	[super didReceiveMemoryWarning];
 	// Dispose of any resources that can be recreated.
 }
-
+#pragma mark - ReadDataDelegate
+- (void)readDataFromClient:(id)content{
+	self.textView.text = [self.textView.text stringByAppendingString:[NSString stringWithFormat:@"\n%@",content]];
+}
 
 - (IBAction)sendAction:(id)sender {
 	[_serverSocket sendScreamDataByWriteScream:self.contentTextField.text];
@@ -38,6 +41,7 @@
 
 - (IBAction)startServerAction:(id)sender {
 	_serverSocket = [[ZJLTCPSocket alloc] initTCPServerSocketWithPort:[self.portTextField.text integerValue]];
+	_serverSocket.delegate = self;
 
 }
 @end

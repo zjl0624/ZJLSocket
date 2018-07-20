@@ -8,7 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol ReadDataDelegate
+@optional
+- (void)readDataFromServer:(id)content;
+
+- (void)readDataFromClient:(id)content;
+@end
 @interface ZJLTCPSocket : NSObject
+
+@property (nonatomic,weak) id<ReadDataDelegate> delegate;
+
 - (instancetype)initTCPClientSocketWithIp:(NSString *)ipAddress port:(NSInteger)port;
 
 - (instancetype)initTCPServerSocketWithPort:(NSInteger)port;

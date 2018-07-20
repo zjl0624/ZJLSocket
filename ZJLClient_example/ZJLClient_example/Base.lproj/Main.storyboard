@@ -65,14 +65,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pdH-Xz-OR2">
-                                <rect key="frame" x="164" y="10" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="接收"/>
-                                <connections>
-                                    <action selector="receiveAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gTu-2M-6mq"/>
-                                </connections>
-                            </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="vGa-mA-kSN">
                                 <rect key="frame" x="16" y="334" width="343" height="313"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -114,6 +106,7 @@
                         <outlet property="IPAddressTextField" destination="etf-wV-Ps7" id="kdU-yW-dpU"/>
                         <outlet property="contentTextFiled" destination="IaH-WA-srk" id="zRl-xo-iZz"/>
                         <outlet property="portTextFiled" destination="48Q-rw-iwE" id="mN0-gD-CME"/>
+                        <outlet property="textView" destination="vGa-mA-kSN" id="g0y-Cd-PDR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

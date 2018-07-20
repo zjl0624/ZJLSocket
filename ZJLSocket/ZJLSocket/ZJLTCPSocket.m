@@ -13,6 +13,7 @@
 @interface ZJLTCPSocket()
 @property (nonatomic,assign) CFSocketRef socketRef;
 @property (nonatomic,strong) NSMutableDictionary *writeStreamDic;
+@property (nonatomic,strong) NSString *currentAddress;
 @end
 @implementation ZJLTCPSocket
 #pragma mark - Init Method
@@ -89,6 +90,12 @@
 	while ((data = recv(CFSocketGetNative(_socketRef), buffer, sizeof(buffer), 0))) {
 		NSString *result = [[NSString alloc] initWithBytes:buffer length:data encoding:NSUTF8StringEncoding];
 		NSLog(@"result = %@",result);
+		if ([(NSObject *)self.delegate respondsToSelector:@selector(readDataFromServer:)]) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self.delegate readDataFromServer:result];
+			});
+
+		}
 		
 	}
 	perror("recv");
@@ -115,24 +122,25 @@
 #pragma mark - CallBack Method
 CFReadStreamRef readStreamRef;
 CFWriteStreamRef writeStreamRef;
-void readStreamCallback(CFReadStreamRef readStream,
-				CFStreamEventType evenType,
-				void *clientCallBackInfo) {
+void readStreamCallback(CFReadStreamRef readStream,CFStreamEventType evenType,void *clientCallBackInfo) {
 	UInt8 buff[2048];
 	
-	NSString *address = (__bridge NSString *)(clientCallBackInfo);
-	
+//	NSString *address = (__bridge NSString *)(clientCallBackInfo);
+//	NSDictionary *dic = (__bridge NSDictionary *)(clientCallBackInfo);
+	ZJLTCPSocket *selfClass = (__bridge ZJLTCPSocket *)(clientCallBackInfo);
 //	NSLog(@"%@", aaa);
 	
 	// ----从可读的数据流中读取数据，返回值是多少字节读到的，如果为0就是已经全部结束完毕，如果是-1则是数据流没有打开或者其他错误发生
 	CFIndex hasRead = CFReadStreamRead(readStream, buff, sizeof(buff));
 	
 	if (hasRead > 0) {
-		NSLog(@"%@发来%s\n",address,buff);
-//
-//		const char *str = "for the lich king！！\n";
-//		//向客户端输出数据
-//		CFWriteStreamWrite(writeStreamRef, (UInt8 *)str, strlen(str) + 1);
+		NSLog(@"%@发来%s",selfClass.currentAddress,buff);
+		if ([(NSObject *)selfClass.delegate respondsToSelector:@selector(readDataFromClient:)]) {
+			NSString *content = [NSString stringWithFormat:@"%s",buff];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[selfClass.delegate readDataFromClient:content];
+			});
+		}
 	}
 }
 
@@ -165,7 +173,8 @@ void SocketCallBack( CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef
 			CFReadStreamOpen(readStreamRef);
 			CFWriteStreamOpen(writeStreamRef);
 			NSString *address = [NSString stringWithFormat:@"%s:%d",inet_ntoa(addr->sin_addr),addr->sin_port];
-			CFStreamClientContext context = {0,(__bridge void *)(address),NULL,NULL};
+			selfClass.currentAddress = address;
+			CFStreamClientContext context = {0,(__bridge void *)(selfClass),NULL,NULL};
 			
 			if (!CFReadStreamSetClient(readStreamRef, kCFStreamEventHasBytesAvailable, readStreamCallback, &context)) {
 				exit(1);
