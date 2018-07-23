@@ -39,10 +39,15 @@
 
 - (IBAction)connectAction:(id)sender {
 	_clientSocket = [[ZJLSocket alloc] initTCPClientSocketWithIp:self.IPAddressTextField.text port:[self.portTextFiled.text integerValue]];
+//	_clientSocket = [[ZJLSocket alloc] initUDPClientSocketWithIP:self.IPAddressTextField.text port:[self.portTextFiled.text integerValue]];
 	_clientSocket.delegate = self;
 }
 
 - (IBAction)sendAction:(id)sender {
 	[_clientSocket sendScreamData:self.contentTextFiled.text];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	[self.view endEditing:YES];
 }
 @end

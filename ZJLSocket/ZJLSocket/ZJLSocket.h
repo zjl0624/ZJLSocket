@@ -18,6 +18,10 @@
 
 @property (nonatomic,weak) id<ReadDataDelegate> delegate;
 
+- (instancetype)initUDPServerSocketWithPort:(NSInteger)port;
+
+- (instancetype)initUDPClientSocketWithIP:(NSString *)ipAddress port:(NSInteger)port;
+
 - (instancetype)initTCPClientSocketWithIp:(NSString *)ipAddress port:(NSInteger)port;
 
 - (instancetype)initTCPServerSocketWithPort:(NSInteger)port;

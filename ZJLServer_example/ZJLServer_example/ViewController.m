@@ -37,11 +37,17 @@
 
 - (IBAction)sendAction:(id)sender {
 	[_serverSocket sendScreamDataByWriteScream:self.contentTextField.text];
+//	[_serverSocket sendScreamData:self.contentTextField.text];
 }
 
 - (IBAction)startServerAction:(id)sender {
 	_serverSocket = [[ZJLSocket alloc] initTCPServerSocketWithPort:[self.portTextField.text integerValue]];
+//	_serverSocket = [[ZJLSocket alloc] initUDPServerSocketWithPort:[self.portTextField.text integerValue]];
 	_serverSocket.delegate = self;
 
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+	[self.view endEditing:YES];
 }
 @end

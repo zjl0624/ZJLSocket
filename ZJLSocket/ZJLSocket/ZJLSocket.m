@@ -10,6 +10,7 @@
 #import <sys/socket.h>
 #import <netinet/in.h>
 #import <arpa/inet.h>
+
 @interface ZJLSocket()
 @property (nonatomic,assign) CFSocketRef socketRef;
 @property (nonatomic,strong) NSMutableDictionary *writeStreamDic;
@@ -17,6 +18,42 @@
 @end
 @implementation ZJLSocket
 #pragma mark - Init Method
+- (instancetype)initUDPServerSocketWithPort:(NSInteger)port {
+	self = [super init];
+	if (self) {
+		_writeStreamDic = [[NSMutableDictionary alloc] init];
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			CFDataRef dataRef = [self createSocketWithip:@"127.0.0.1" port:port CFSocketCallBackType:kCFSocketDataCallBack];
+			BOOL reused = YES;
+			//设置允许重用本地地址和端口
+			setsockopt(CFSocketGetNative(_socketRef), SOL_SOCKET, SO_REUSEADDR, (const void *)&reused, sizeof(reused));
+			//将CFSocket绑定到指定IP地址
+			if (CFSocketSetAddress(_socketRef,dataRef) != kCFSocketSuccess) {
+				//如果_socket不为NULL，则释放_socket
+				if (_socketRef) {
+					CFRelease(_socketRef);
+					exit(1);
+				}
+				_socketRef = NULL;
+			}
+			
+			[self addRunLoop];
+		});
+	}
+	return self;
+}
+- (instancetype)initUDPClientSocketWithIP:(NSString *)ipAddress port:(NSInteger)port {
+	self = [super init];
+	if (self) {
+		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+			CFDataRef dataRef = [self createSocketWithip:ipAddress port:port CFSocketCallBackType:kCFSocketDataCallBack];
+			//连接
+			CFSocketConnectToAddress(_socketRef, dataRef, -1);
+			[self addRunLoop];
+		});
+	}
+	return self;
+}
 - (instancetype)initTCPClientSocketWithIp:(NSString *)ipAddress port:(NSInteger)port{
 	self = [super init];
 	if (self) {
@@ -49,6 +86,7 @@
 				}
 				_socketRef = NULL;
 			}
+
 			[self addRunLoop];
 		});
 	}
@@ -60,8 +98,13 @@
 - (CFDataRef)createSocketWithip:(NSString *)ipAddress port:(NSInteger)port CFSocketCallBackType:(CFSocketCallBackType)type{
 	//创建socket上下文
 	CFSocketContext context = {0,(__bridge void *)(self),NULL,NULL,NULL};
-	//创建socket
-	_socketRef = CFSocketCreate(kCFAllocatorDefault, PF_INET, SOCK_STREAM, IPPROTO_TCP, type, SocketCallBack, &context);
+	if (type == kCFSocketDataCallBack) {
+		_socketRef = CFSocketCreate(kCFAllocatorDefault, PF_INET, SOCK_DGRAM, IPPROTO_UDP, type, SocketCallBack, &context);
+	}else {
+		//创建socket
+		_socketRef = CFSocketCreate(kCFAllocatorDefault, PF_INET, SOCK_STREAM, IPPROTO_TCP, type, SocketCallBack, &context);
+	}
+
 	//创建服务器地址
 	struct sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
@@ -88,14 +131,24 @@
 - (void)readScreamData {
 	char buffer[1024];
 	long data;
-	while ((data = recv(CFSocketGetNative(_socketRef), buffer, sizeof(buffer), 0))) {
+	uint8_t name[SOCK_MAXADDRLEN];
+	socklen_t namelen = sizeof(name);
+	while ((data = recvfrom(CFSocketGetNative(_socketRef), buffer, sizeof(buffer), 0, (struct sockaddr *)name, &namelen))) {
+		struct sockaddr_in *addr = (struct sockaddr_in *)name;
+		NSLog(@"%s:%d连接进来了",inet_ntoa(addr->sin_addr),addr->sin_port);
+//		[self.writeStreamDic setObject:(__bridge id)(writeStreamRef) forKey:[NSString stringWithFormat:@"%s:%d",inet_ntoa(addr->sin_addr),addr->sin_port]];
 		NSString *result = [[NSString alloc] initWithBytes:buffer length:data encoding:NSUTF8StringEncoding];
 		NSLog(@"result = %@",result);
 		if ([(NSObject *)self.delegate respondsToSelector:@selector(readDataFromServer:)]) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[self.delegate readDataFromServer:result];
 			});
-
+			
+		}
+		if ([(NSObject *)self.delegate respondsToSelector:@selector(readDataFromClient:)]) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self.delegate readDataFromClient:result];
+			});
 		}
 		
 	}
@@ -120,6 +173,7 @@
 	}
 
 }
+
 #pragma mark - CallBack Method
 CFReadStreamRef readStreamRef;
 CFWriteStreamRef writeStreamRef;
@@ -195,7 +249,9 @@ void SocketCallBack( CFSocketRef s, CFSocketCallBackType callbackType, CFDataRef
 	}else if (callbackType == kCFSocketWriteCallBack){
 		
 	}else if (callbackType == kCFSocketDataCallBack){
-		
+		NSLog(@"%@",[[NSString alloc] initWithData:(__bridge NSData * _Nonnull)(data) encoding:NSUTF8StringEncoding]);
+
+		[selfClass readScreamData];
 	}
 
 }
